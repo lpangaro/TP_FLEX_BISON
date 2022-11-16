@@ -10,17 +10,15 @@
  %}
  %union {char* cadena; int num; char caracter;}
  %token INICIO FIN LEER ESCRIBIR ID CONSTANTE ASIGNACION 
-        PARENIZQUIERDO PARENDERECHO COMA PUNTOYCOMA MAS MENOS
+        PA PC COMA PUNTOYCOMA MAS MENOS
  %left MAS MENOS
+ %rigth ASIGNACION
  %type <cadena> ID INICIO FIN LEER ESCRIBIR ASIGNACION
  %type <num> sumar restar CONSTANTE 
- %type <caracter> PARENIZQUIERDO PARENDERECHO COMA PUNTOYCOMA MAS MENOS
+ %type <caracter> PA PD COMA PUNTOYCOMA MAS MENOS
  %%
  sumar: CONSTANTE|
         sumar MAS sumar {mostrarResultado($1+$3);}
- ;
- restar: CONSTANTE|
-        restar MENOS restar {mostrarResultado($1+$3);}
  ;
  %%
  int main(){
