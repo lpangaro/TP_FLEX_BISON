@@ -39,45 +39,54 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INICIO = 258,
-     FIN = 259,
-     LEER = 260,
-     ESCRIBIR = 261,
-     ID = 262,
-     CONSTANTE = 263,
-     ASIGNACION = 264,
-     PARENIZQUIERDO = 265,
-     PARENDERECHO = 266,
-     COMA = 267,
-     PUNTOYCOMA = 268,
-     MAS = 269,
-     MENOS = 270
+     CONSTANTE = 258,
+     SUMA = 259,
+     RESTA = 260,
+     NL = 261,
+     FDT = 262,
+     PABIERTO = 263,
+     PCERRADO = 264,
+     IDENTIFICADOR = 265,
+     ID = 266,
+     INICIO = 267,
+     FIN = 268,
+     LEER = 269,
+     ESCRIBIR = 270,
+     ASIGNACION = 271,
+     COMA = 272,
+     PUNTOYCOMA = 273
    };
 #endif
 /* Tokens.  */
-#define INICIO 258
-#define FIN 259
-#define LEER 260
-#define ESCRIBIR 261
-#define ID 262
-#define CONSTANTE 263
-#define ASIGNACION 264
-#define PARENIZQUIERDO 265
-#define PARENDERECHO 266
-#define COMA 267
-#define PUNTOYCOMA 268
-#define MAS 269
-#define MENOS 270
+#define CONSTANTE 258
+#define SUMA 259
+#define RESTA 260
+#define NL 261
+#define FDT 262
+#define PABIERTO 263
+#define PCERRADO 264
+#define IDENTIFICADOR 265
+#define ID 266
+#define INICIO 267
+#define FIN 268
+#define LEER 269
+#define ESCRIBIR 270
+#define ASIGNACION 271
+#define COMA 272
+#define PUNTOYCOMA 273
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "bison.y"
-{char* cadena; int num; char caracter;}
+#line 13 "bison.y"
+{
+	int num;
+	char* caracteres;
+}
 /* Line 1529 of yacc.c.  */
-#line 81 "y.tab.h"
+#line 90 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

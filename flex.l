@@ -1,31 +1,56 @@
-/*PARA COMPILAR	: bison -yd bison.y 					*/
-/*				: flex flex.l							*/
-/*				: gcc lex.yy.c y.tab.c -o ejecutable	*/
 %{
-	#include<stdio.h>
-	#include<stdlib.h>
-	#include "y.tab.h"
+#include <stdio.h>
+#include <stdlib.h>	
+#include <string.h>
+#include "y.tab.h"
+
+void errorLexico(void);
+void excesoCaracteres(void);
+
 #ifndef yywrap
-static int yywrap(void) { return 1;}
+static int yywrap(void) {return 1;}
 #endif
 %}
-DIGITO [0-9]
-LETRAS [a-zA-Z]
-IDENTIFICADOR {LETRAS}({LETRAS}|{DIGITO})*
-%%
-{DIGITO}+  {yylval.num=atoi(yytext);return (CONSTANTE);};
-{IDENTIFICADOR} {return (ID);}
 
-"inicio"		return INICIO;
-"fin"			return FIN;
-"-" 			{return (MENOS);}
-"+" 			{return (MAS);}
-":="			{return (ASIGNACION);}
-"("				{return (PA);}
-")"				{return (PC);}
-","				{return (COMA);}
-";"				{return (PUNTOYCOMA);}
-":"				{return (DOSPUNTOS);}
+%option noyywrap
+separador		[ \t]+
+DIGITO			[0-9]
+LETRAS			[a-zA-Z]
+IDENTIFICADOR	{LETRAS}({LETRAS}|{DIGITO})*
 
-.     {printf("ES UN ERROR LEXICO");};
 %%
+
+{separador}     { /* Ignoramos los separadores */ }
+"exit"|"salir"	{printf("Fin del programa.\n");exit(0);}
+
+"inicio"        {return(INICIO);}
+"fin"           {return(FIN);}
+"leer"          {return(LEER);}
+"escribir"      {return(ESCRIBIR);}
+
+{DIGITO}+	    { yylval.num=atoi(yytext); return(CONSTANTE);}
+{IDENTIFICADOR} {   if(strlen(yytext) >= 32) {
+						excesoCaracteres();
+					} else {
+						strcpy(yylval.caracteres, yytext);	
+						return (ID);
+					}
+				}
+
+":="            {return(ASIGNACION);}
+","             {return(COMA);}
+";"             {return(PUNTOYCOMA);}
+"+"             {return(SUMA);}
+"-"             {return(RESTA);}
+"("             {return(PABIERTO);}
+")"             {return(PCERRADO);}
+.				{errorLexico();}
+%%
+
+void errorLexico(void){
+   printf("Error léxico: caracter \"%s\" inválido, en línea %d.", yytext, yylineno);
+}
+
+void excesoCaracteres(void){
+	printf("Error sintáctico: La longitud máxima de los identificadores es de 32 caracteres");
+}
