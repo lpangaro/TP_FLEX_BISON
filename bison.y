@@ -81,7 +81,7 @@ primaria : IDENTIFICADOR 								{leer_id($1);} //imprimo el valor del identific
 						RESTA #procesar_op 
 operadorAditivo : SUMA 	{$$ = procesar_op($1);}  
 				| RESTA {$$ = procesar_op($1);}
-;*/
+; */
 %%
 FILE *yyin;
 #define largo 33

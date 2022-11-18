@@ -47,5 +47,5 @@ void errorLexico(void){
    printf("ERROR LÉXICO: caracter \"%s\" inválido.\n", yytext);
 }
 void excesoCaracteres(void){
-	printf("ERROR SINTÁCTICO: La longitud máxima de los identificadores es de 32 caracteres");
+	printf("ERROR SINTÁCTICO: Longitud de identificador demasiado larga\n");
 }
