@@ -35,7 +35,7 @@ objetivo : programa FDT {exit(0);};
 
 /* <programa> -> #comenzar inicio <listaSentencias> fin */
 programa : INICIO FIN 					{exit(0);}
-		 | INICIO listaSentencias FIN 	{}
+		 | INICIO listaSentencias FIN 	{exit(0);}
 ;
 
 /* <listaSentencias> -> <sentencia> {<sentencia>} */
@@ -110,7 +110,7 @@ void listarIdentificadores (void);
 
 int yyerror(char* s) {
 	if(!strcmp(s, "syntax error"))
-		printf("Error: Error de sintaxis.\n");
+		printf("Error de sintaxis.\n");
 
 	else
 		printf("Error: %s.\n", s);
@@ -143,7 +143,7 @@ void asignar(char* nombre, int valor) {
 void leer_id(char* nombre) {
 	int indice = buscar(nombre);
 	if(indice < 0) { 
-		yyerror("ERROR! Aun no se encuentra definido el identificador"); 
+		printf("ERROR SEMANTICO! Aun no se encuentra definido el identificador %s\n", nombre); 
 	}
 	else{
 		printf("%s = %d\n", nombre, buffer[indice].valor);
@@ -173,7 +173,7 @@ int main(int argc, char* argv[]) {
 	if(argc == 1) {
 		system("clear");
 		printf("Ingrese 1 para escribir el nombre del archivo que desea abrir\n");
-		printf("Ingrese 2 para escribir el codigo micro de forma manual. (no olvides comenzar con 'inicio' y terminar con 'fin'\n OPCION: ");
+		printf("Ingrese 2 para escribir el codigo micro. (no olvides comenzar con 'inicio' y terminar con 'fin'\n OPCION: ");
 		scanf("%d", &menu);
 
 		while (menu != 0) {
