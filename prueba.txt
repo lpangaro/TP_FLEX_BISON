@@ -1,0 +1,8 @@
+inicio
+a:=10;
+b:=5;
+leer(a,b);
+leer(a);
+escribir(8);
+leer(a);
+fin
