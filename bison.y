@@ -5,9 +5,9 @@
 int yylex();
 int yyerror();
 
-void asignar(char * identificador, int value);
-void leer_id(char * identificador);
-int  devolverValor(char * identificador);
+void asignar(char * nombre, int valor);
+void leer_id(char * nombre);
+int  devolverValor(char * nombre);
 %}
 
 %union {
@@ -17,7 +17,7 @@ int  devolverValor(char * identificador);
 
 %token  <num> CONSTANTE
 %token  SUMA    RESTA   NL  FDT
-%token  PABIERTO	PCERRADO   IDENTIFICADOR ID
+%token  PABIERTO	PCERRADO   IDENTIFICADOR 
 %token  INICIO  FIN  LEER  ESCRIBIR  ASIGNACION  COMA PUNTOYCOMA
 
 %left   SUMA    RESTA	COMA
@@ -34,7 +34,7 @@ objetivo : programa FDT {exit(0);};
 
 /* <programa> -> #comenzar inicio <listaSentencias> fin */
 programa : INICIO FIN 					{exit(0);}
-		|  INICIO listaSentencias FIN 	{}
+		 |  INICIO listaSentencias FIN 	{}
 ;
 
 /* <listaSentencias> -> <sentencia> {<sentencia>} */
@@ -46,103 +46,107 @@ listaSentencias : listaSentencias sentencia		{}
 				  leer(<listadeIndentificadores>); 			|
 				  escribir(<listaExpresiones>); */
 sentencia : IDENTIFICADOR ASIGNACION expresion PUNTOYCOMA 				{printf("\nIdentificada operacion de asignacion\n%s:=%d;",$1,$3);asignar($1, $3); }
-			| LEER PABIERTO listaIdentificadores PCERRADO PUNTOYCOMA	{printf("\nIdentificada operacion de lectura\n");}
-			| ESCRIBIR PABIERTO listaExpresiones PCERRADO PUNTOYCOMA	{printf("\nIdentificada operacion de escritura\n");}
+		  | LEER PABIERTO listado PCERRADO PUNTOYCOMA					{printf("\nIdentificada operacion de lectura\n");}
+		  | ESCRIBIR PABIERTO listaExpresiones PCERRADO PUNTOYCOMA		{printf("\nIdentificada operacion de escritura\n");}
 ;
 
-/* <listaIdentificadores> -> <identificador> #leer_id {, <identificador> #leer_id} */
-listaIdentificadores : listaIdentificadores COMA IDENTIFICADOR 	{leer_id($3);}
-					 | IDENTIFICADOR							{leer_id($1);}
+/* <listado> -> <identificador> #leer_id {, <identificador> #leer_id} */
+listado : listado COMA IDENTIFICADOR 	{leer_id($3);}
+		| IDENTIFICADOR					{leer_id($1);}
 ;
 
 /* <listaExpresiones> -> <expresion> #escribir_exp 
 					  {, <expresion> #escribir_exp} */
 listaExpresiones : listaExpresiones COMA expresion 	{printf(", %d", $3);}
-				| expresion							{printf("%d", $1);}
+				 | expresion						{printf("%d", $1);}
 ;			
 
 /* <expresion> -> <primaria> 
 				  {<operadorAditivo> <primaria> #gen_infijo} */
 expresion :	primaria					{$$ = $1;}
-			| primaria SUMA expresion	{$$ = $1 + $3;}
-			| primaria RESTA expresion	{$$ = $1 - $3;}
+		  | primaria SUMA expresion		{$$ = $1 + $3;}
+		  | primaria RESTA expresion	{$$ = $1 - $3;}
 ;
 
 /* <primaria> -> <identificador> 		 |
 				 CONSTANTE #procesar_cte | 
 				 <expresion> */
-primaria : IDENTIFICADOR 							{$$ = devolverValor($1);}
-		| CONSTANTE 								{$$ = $1;}
-		| PABIERTO expresion PCERRADO {$$ = $2;}
+primaria : IDENTIFICADOR 				{$$ = devolverValor($1);}
+		 | CONSTANTE 					{$$ = $1;}
+		 | PABIERTO expresion PCERRADO 	{$$ = $2;}
+;
+
+/* <operadorAditivo> -> SUMA #procesar_op |
+						RESTA #procesar_op */
+operadorAditivo : SUMA 	{$$ = '+';}  
+				| RESTA {$$ = '-';}
 ;
 %%
 FILE *yyin;
+#define largo 33
 
 typedef struct Identificador {
-		char identificador[33];
-		int valor;
+		char nombre[largo]; //nombre de la variable
+		int valor;		    //valor de la variable
 } Identificador;
 
-Identificador arrayIdentificadores[100];
-int cantidadIdentificadores = 0;
-int buscarIdentificador(char * identificador);
-void insertarIdentificador(char * identificador, int value);
-void asignar(char * identificador, int value);
-void leer_id(char * identificador);
-int devolverValor(char * identificador);
+Identificador listado[500]; //Armo una lista de identificadores para irlos guardando ahi
+int tope = 0; //me dice cuantos identificadores tengo en la lista
+int buscar(char* nombre);
+void asignar(char* nombre, int valor);
+void leer_id(char* nombre);
+int devolverValor(char* nombre);
 
 
-int yyerror(char *s) {
+int yyerror(char* s) {
 	if(!strcmp(s, "syntax error")) printf("Error: Error de sintaxis.\n");
 	else	printf("Error: %s.\n", s);
 	exit(-1);
 }
 
-int buscarIdentificador(char * identificador) {
+int buscar(char* nombre) {
 	int i;
-	for(i = 0; i < cantidadIdentificadores; i++) {
-		if(!strcmp(arrayIdentificadores[i].identificador,identificador)){
+	for(i = 0; i < tope; i++) {
+		if(!strcmp(listado[i].nombre, nombre)){
 			return i;
 		}
 	}
 	return -1;
 }
 
-int devolverValor(char * identificador) {
-	int indice = buscarIdentificador(identificador);
-	if(indice < 0) { yyerror("Identificador no inicializado"); }
-	return arrayIdentificadores[indice].valor;
+int devolverValor(char* nombre) {
+	int indice = buscar(nombre);
+	if(indice < 0) { 
+		yyerror("ERROR! Aun no se encuentra definido el identificador %s", nombre); 
+	}
+	return (listado[indice].valor);
 }
 
-void insertarIdentificador(char * identificador, int value) {
-	int indice = cantidadIdentificadores;
-	strcpy(arrayIdentificadores[indice].identificador, identificador);
-	arrayIdentificadores[indice].valor = value;
-	cantidadIdentificadores++;
-}
-
-void asignar(char * identificador, int value) {	
-	int indiceIdentificador;
-	indiceIdentificador = buscarIdentificador(identificador);
-	if(indiceIdentificador < 0) {
-		insertarIdentificador(identificador, value);
-	} else {
-		arrayIdentificadores[indiceIdentificador].valor = value;		
+void asignar(char* nombre, int valor) {	
+	int indice = buscar(nombre);
+	if(indice < 0) { // el identificador no esta en el listado
+		//Lo agrego al final
+		strcpy(listado[tope].nombre, nombre);
+		listado[tope].valor = valor;
+		tope++;
+	} 
+	else { //El identificador estaba en el listado
+		listado[indice].valor = valor;	//cambio su valor
 	}	
 }
 
-void leer_id(char * identificador) {
+void leer_id(char* nombre) {
 	int aux;
-	printf("ingrese valor para %s: ", identificador);
+	printf("ingrese valor para %s: ", nombre);
 	scanf("%d",&aux); 
-	asignar(identificador, aux);	
+	asignar(nombre, aux);	
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 	int menu = 0;
 	char file [30];
 	if(argc == 1) {
-		printf("Ingrese 1 para escribir el nombre del archivo que desea abrir");
+		printf("Ingrese 1 para escribir el nombre del archivo que desea abrir\n");
 		printf("Ingrese 2 para escribir el codigo micro de forma manual. (no olvides comenzar con 'inicio' y terminar con 'fin'\n OPCION: ");
 		scanf("%d", &menu);
 

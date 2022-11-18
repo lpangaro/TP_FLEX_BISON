@@ -47,14 +47,13 @@
      PABIERTO = 263,
      PCERRADO = 264,
      IDENTIFICADOR = 265,
-     ID = 266,
-     INICIO = 267,
-     FIN = 268,
-     LEER = 269,
-     ESCRIBIR = 270,
-     ASIGNACION = 271,
-     COMA = 272,
-     PUNTOYCOMA = 273
+     INICIO = 266,
+     FIN = 267,
+     LEER = 268,
+     ESCRIBIR = 269,
+     ASIGNACION = 270,
+     COMA = 271,
+     PUNTOYCOMA = 272
    };
 #endif
 /* Tokens.  */
@@ -66,14 +65,13 @@
 #define PABIERTO 263
 #define PCERRADO 264
 #define IDENTIFICADOR 265
-#define ID 266
-#define INICIO 267
-#define FIN 268
-#define LEER 269
-#define ESCRIBIR 270
-#define ASIGNACION 271
-#define COMA 272
-#define PUNTOYCOMA 273
+#define INICIO 266
+#define FIN 267
+#define LEER 268
+#define ESCRIBIR 269
+#define ASIGNACION 270
+#define COMA 271
+#define PUNTOYCOMA 272
 
 
 
@@ -86,7 +84,7 @@ typedef union YYSTYPE
 	char* caracteres;
 }
 /* Line 1529 of yacc.c.  */
-#line 90 "y.tab.h"
+#line 88 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

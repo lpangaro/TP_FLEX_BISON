@@ -16,10 +16,9 @@ static int yywrap(void) {return 1;}
 separador		[ \t]+
 DIGITO			[0-9]
 LETRAS			[a-zA-Z]
-IDENTIFICADOR	{LETRAS}({LETRAS}|{DIGITO})*
+ID	{LETRAS}({LETRAS}|{DIGITO})*
 
 %%
-
 {separador}     { /* Ignoramos los separadores */ }
 "exit"|"salir"	{printf("Fin del programa.\n");exit(0);}
 
@@ -29,14 +28,13 @@ IDENTIFICADOR	{LETRAS}({LETRAS}|{DIGITO})*
 "escribir"      {return(ESCRIBIR);}
 
 {DIGITO}+	    { yylval.num=atoi(yytext); return(CONSTANTE);}
-{IDENTIFICADOR} {   if(strlen(yytext) >= 32) {
+{ID} 			{   if(strlen(yytext) >= 32) {
 						excesoCaracteres();
 					} else {
-						strcpy(yylval.caracteres, yytext);	
-						return (ID);
+						yylval.caracteres = strdup(yytext);	
+						return (IDENTIFICADOR);
 					}
 				}
-
 ":="            {return(ASIGNACION);}
 ","             {return(COMA);}
 ";"             {return(PUNTOYCOMA);}
@@ -46,11 +44,9 @@ IDENTIFICADOR	{LETRAS}({LETRAS}|{DIGITO})*
 ")"             {return(PCERRADO);}
 .				{errorLexico();}
 %%
-
 void errorLexico(void){
    printf("Error léxico: caracter \"%s\" inválido, en línea %d.", yytext, yylineno);
 }
-
 void excesoCaracteres(void){
 	printf("Error sintáctico: La longitud máxima de los identificadores es de 32 caracteres");
 }

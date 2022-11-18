@@ -703,8 +703,7 @@ YY_DECL
 	{
 #line 21 "flex.l"
 
-
-#line 707 "lex.yy.c"
+#line 706 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -763,96 +762,96 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 23 "flex.l"
+#line 22 "flex.l"
 { /* Ignoramos los separadores */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 24 "flex.l"
+#line 23 "flex.l"
 {printf("Fin del programa.\n");exit(0);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 26 "flex.l"
+#line 25 "flex.l"
 {return(INICIO);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 27 "flex.l"
+#line 26 "flex.l"
 {return(FIN);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 28 "flex.l"
+#line 27 "flex.l"
 {return(LEER);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 29 "flex.l"
+#line 28 "flex.l"
 {return(ESCRIBIR);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 "flex.l"
+#line 30 "flex.l"
 { yylval.num=atoi(yytext); return(CONSTANTE);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "flex.l"
+#line 31 "flex.l"
 {   if(strlen(yytext) >= 32) {
 						excesoCaracteres();
 					} else {
-						strcpy(yylval.caracteres, yytext);	
-						return (ID);
+						yylval.caracteres = strdup(yytext);	
+						return (IDENTIFICADOR);
 					}
 				}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 40 "flex.l"
+#line 38 "flex.l"
 {return(ASIGNACION);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 41 "flex.l"
+#line 39 "flex.l"
 {return(COMA);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 42 "flex.l"
+#line 40 "flex.l"
 {return(PUNTOYCOMA);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 43 "flex.l"
+#line 41 "flex.l"
 {return(SUMA);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 44 "flex.l"
+#line 42 "flex.l"
 {return(RESTA);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 45 "flex.l"
+#line 43 "flex.l"
 {return(PABIERTO);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 46 "flex.l"
+#line 44 "flex.l"
 {return(PCERRADO);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 47 "flex.l"
+#line 45 "flex.l"
 {errorLexico();}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 48 "flex.l"
+#line 46 "flex.l"
 ECHO;
 	YY_BREAK
-#line 855 "lex.yy.c"
+#line 854 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1857,13 +1856,11 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 48 "flex.l"
-
+#line 46 "flex.l"
 
 void errorLexico(void){
    printf("Error léxico: caracter \"%s\" inválido, en línea %d.", yytext, yylineno);
 }
-
 void excesoCaracteres(void){
 	printf("Error sintáctico: La longitud máxima de los identificadores es de 32 caracteres");
 }
