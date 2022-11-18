@@ -7,6 +7,20 @@ UTN - FRBA
 Curso: K2006   
 Docente: Roxana Leituz
 
+COMPILAR FLEX Y BISON
+bison -yd bison.y 
+flex flex.l
+gcc lex.yy.c y.tab.c -o ejecutable
+./ejecutable
+
+Seleccione la opcion 2 (ingresar manualmente)
+ejmplo de entrada:
+inicio
+a:=2;
+b:=3;
+leer(a);
+fin
+
 ---
 - **Alumna:** Beretta Chiara Sofía
 - **Legajo:** 204.619-2
