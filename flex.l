@@ -20,7 +20,6 @@ ID	{LETRAS}({LETRAS}|{DIGITO})*
 
 %%
 {separador}     { /* Ignoramos los separadores */ }
-"exit"|"salir"	{printf("Fin del programa.\n");exit(0);}
 
 "inicio"        {return(INICIO);}
 "fin"           {return(FIN);}
@@ -40,8 +39,8 @@ ID	{LETRAS}({LETRAS}|{DIGITO})*
 ";"             {return(PUNTOYCOMA);}
 "+"             {return(SUMA);}
 "-"             {return(RESTA);}
-"("             {return(PABIERTO);}
-")"             {return(PCERRADO);}
+"("             {return(ABRIR_PARENTESIS);}
+")"             {return(CERRAR_PARENTESIS);}
 .				{errorLexico();}
 %%
 void errorLexico(void){

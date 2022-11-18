@@ -71,8 +71,8 @@
      RESTA = 260,
      NL = 261,
      FDT = 262,
-     PABIERTO = 263,
-     PCERRADO = 264,
+     ABRIR_PARENTESIS = 263,
+     CERRAR_PARENTESIS = 264,
      IDENTIFICADOR = 265,
      INICIO = 266,
      FIN = 267,
@@ -89,8 +89,8 @@
 #define RESTA 260
 #define NL 261
 #define FDT 262
-#define PABIERTO 263
-#define PCERRADO 264
+#define ABRIR_PARENTESIS 263
+#define CERRAR_PARENTESIS 264
 #define IDENTIFICADOR 265
 #define INICIO 266
 #define FIN 267
@@ -112,9 +112,10 @@
 int yylex();
 int yyerror();
 
-void asignar(char * identificador, int value);
-void leer_id(char * identificador);
-int  devolverValor(char * identificador);
+void asignar(char * nombre, int valor);
+void leer_id(char * nombre);
+void escribir_exp(char * nombre);
+
 
 
 /* Enabling traces.  */
@@ -137,13 +138,13 @@ int  devolverValor(char * identificador);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "bison.y"
+#line 14 "bison.y"
 {
 	int num;
 	char* caracteres;
 }
 /* Line 193 of yacc.c.  */
-#line 147 "y.tab.c"
+#line 148 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -156,7 +157,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 160 "y.tab.c"
+#line 161 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -446,8 +447,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    33,    33,    36,    37,    41,    42,    48,    49,    50,
-      54,    55,    60,    61,    66,    67,    68,    74,    75,    76
+       0,    34,    34,    37,    38,    42,    43,    49,    50,    51,
+      55,    56,    61,    62,    67,    68,    69,    75,    76,    77
 };
 #endif
 
@@ -457,10 +458,10 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "CONSTANTE", "SUMA", "RESTA", "NL",
-  "FDT", "PABIERTO", "PCERRADO", "IDENTIFICADOR", "INICIO", "FIN", "LEER",
-  "ESCRIBIR", "ASIGNACION", "COMA", "PUNTOYCOMA", "$accept", "objetivo",
-  "programa", "listaSentencias", "sentencia", "listaIdentificadores",
-  "listaExpresiones", "expresion", "primaria", 0
+  "FDT", "ABRIR_PARENTESIS", "CERRAR_PARENTESIS", "IDENTIFICADOR",
+  "INICIO", "FIN", "LEER", "ESCRIBIR", "ASIGNACION", "COMA", "PUNTOYCOMA",
+  "$accept", "objetivo", "programa", "listaSentencias", "sentencia",
+  "listaIdentificadores", "listaExpresiones", "expresion", "primaria", 0
 };
 #endif
 
@@ -1368,98 +1369,98 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 33 "bison.y"
+#line 34 "bison.y"
     {exit(0);}
     break;
 
   case 3:
-#line 36 "bison.y"
+#line 37 "bison.y"
     {exit(0);}
     break;
 
   case 4:
-#line 37 "bison.y"
+#line 38 "bison.y"
     {}
     break;
 
   case 5:
-#line 41 "bison.y"
-    {}
-    break;
-
-  case 6:
 #line 42 "bison.y"
     {}
     break;
 
+  case 6:
+#line 43 "bison.y"
+    {}
+    break;
+
   case 7:
-#line 48 "bison.y"
-    {printf("\nIdentificada operacion de asignacion\n%s:=%d;",(yyvsp[(1) - (4)].caracteres),(yyvsp[(3) - (4)].num));asignar((yyvsp[(1) - (4)].caracteres), (yyvsp[(3) - (4)].num)); }
+#line 49 "bison.y"
+    {printf("Asignacion\n"); asignar((yyvsp[(1) - (4)].caracteres), (yyvsp[(3) - (4)].num));}
     break;
 
   case 8:
-#line 49 "bison.y"
-    {printf("\nIdentificada operacion de lectura\n");}
+#line 50 "bison.y"
+    {printf("Lectura\n");}
     break;
 
   case 9:
-#line 50 "bison.y"
-    {printf("\nIdentificada operacion de escritura\n");}
+#line 51 "bison.y"
+    {printf("Escritura\n");}
     break;
 
   case 10:
-#line 54 "bison.y"
+#line 55 "bison.y"
     {leer_id((yyvsp[(3) - (3)].caracteres));}
     break;
 
   case 11:
-#line 55 "bison.y"
+#line 56 "bison.y"
     {leer_id((yyvsp[(1) - (1)].caracteres));}
     break;
 
   case 12:
-#line 60 "bison.y"
-    {printf(", %d", (yyvsp[(3) - (3)].num));}
+#line 61 "bison.y"
+    {printf("%d", (yyvsp[(3) - (3)].num));}
     break;
 
   case 13:
-#line 61 "bison.y"
+#line 62 "bison.y"
     {printf("%d", (yyvsp[(1) - (1)].num));}
     break;
 
   case 14:
-#line 66 "bison.y"
+#line 67 "bison.y"
     {(yyval.num) = (yyvsp[(1) - (1)].num);}
     break;
 
   case 15:
-#line 67 "bison.y"
+#line 68 "bison.y"
     {(yyval.num) = (yyvsp[(1) - (3)].num) + (yyvsp[(3) - (3)].num);}
     break;
 
   case 16:
-#line 68 "bison.y"
+#line 69 "bison.y"
     {(yyval.num) = (yyvsp[(1) - (3)].num) - (yyvsp[(3) - (3)].num);}
     break;
 
   case 17:
-#line 74 "bison.y"
-    {(yyval.num) = devolverValor((yyvsp[(1) - (1)].caracteres));}
+#line 75 "bison.y"
+    {leer_id((yyvsp[(1) - (1)].caracteres));}
     break;
 
   case 18:
-#line 75 "bison.y"
+#line 76 "bison.y"
     {(yyval.num) = (yyvsp[(1) - (1)].num);}
     break;
 
   case 19:
-#line 76 "bison.y"
+#line 77 "bison.y"
     {(yyval.num) = (yyvsp[(2) - (3)].num);}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1463 "y.tab.c"
+#line 1464 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1673,75 +1674,78 @@ yyreturn:
 }
 
 
-#line 78 "bison.y"
+#line 85 "bison.y"
 
 FILE *yyin;
+#define largo 33
 
 typedef struct Identificador {
-		char identificador[33];
-		int valor;
+		char nombre[largo]; //nombre de la variable
+		int valor;		    //valor de la variable
 } Identificador;
 
-Identificador arrayIdentificadores[100];
-int cantidadIdentificadores = 0;
-int buscarIdentificador(char * identificador);
-void insertarIdentificador(char * identificador, int value);
-void asignar(char * identificador, int value);
-void leer_id(char * identificador);
-int devolverValor(char * identificador);
+Identificador buffer[500]; //Armo una lista de identificadores para irlos guardando ahi
+int tope = 0; //me dice cuantos identificadores tengo en la lista
+int buscar(char* nombre);
+void asignar(char* nombre, int valor);
+void escribir_exp(char* nombre);
+void leer_id(char* nombre);
 
+int yyerror(char* s) {
+	if(!strcmp(s, "syntax error"))
+		printf("Error: Error de sintaxis.\n");
 
-int yyerror(char *s) {
-	if(!strcmp(s, "syntax error")) printf("Error: Error de sintaxis.\n");
-	else	printf("Error: %s.\n", s);
+	else
+		printf("Error: %s.\n", s);
 	exit(-1);
 }
 
-int buscarIdentificador(char * identificador) {
+int buscar(char* nombre) {
 	int i;
-	for(i = 0; i < cantidadIdentificadores; i++) {
-		if(!strcmp(arrayIdentificadores[i].identificador,identificador)){
+	for(i = 0; i < tope; i++) {
+		if(!strcmp(buffer[i].nombre, nombre)){
 			return i;
 		}
 	}
 	return -1;
 }
 
-int devolverValor(char * identificador) {
-	int indice = buscarIdentificador(identificador);
-	if(indice < 0) { yyerror("Identificador no inicializado"); }
-	return arrayIdentificadores[indice].valor;
-}
-
-void insertarIdentificador(char * identificador, int value) {
-	int indice = cantidadIdentificadores;
-	strcpy(arrayIdentificadores[indice].identificador, identificador);
-	arrayIdentificadores[indice].valor = value;
-	cantidadIdentificadores++;
-}
-
-void asignar(char * identificador, int value) {	
-	int indiceIdentificador;
-	indiceIdentificador = buscarIdentificador(identificador);
-	if(indiceIdentificador < 0) {
-		insertarIdentificador(identificador, value);
-	} else {
-		arrayIdentificadores[indiceIdentificador].valor = value;		
+void asignar(char* nombre, int valor) {	
+	int indice = buscar(nombre);
+	if(indice < 0) { // el identificador no esta en el buffer
+		//Lo agrego al final
+		strcpy(buffer[tope].nombre, nombre);
+		buffer[tope].valor = valor;
+		tope++;
+	} 
+	else { //El identificador estaba en el buffer
+		buffer[indice].valor = valor;	//cambio su valor
 	}	
 }
 
-void leer_id(char * identificador) {
-	int aux;
-	printf("ingrese valor para %s: ", identificador);
-	scanf("%d",&aux); 
-	asignar(identificador, aux);	
+void leer_id(char* nombre) {
+	int indice = buscar(nombre);
+	if(indice < 0) { 
+		yyerror("ERROR! Aun no se encuentra definido el identificador"); 
+	}
+	else{
+		printf("%s = %d\n", nombre, buffer[indice].valor);
+	}
 }
 
-int main(int argc, char *argv[]) {
+void escribir_exp(char* nombre) {
+	int valor;
+	printf("ingrese valor para %s: ", nombre);
+	scanf("%d",&valor); 
+	asignar(nombre, valor);	
+}
+
+int main(int argc, char* argv[]) {
 	int menu = 0;
 	char file [30];
 	if(argc == 1) {
-		printf("Ingrese 1 para escribir el nombre del archivo que desea abrir");
+		system("clear");
+		printf("Ingrese 1 para escribir el nombre del archivo que desea abrir\n");
 		printf("Ingrese 2 para escribir el codigo micro de forma manual. (no olvides comenzar con 'inicio' y terminar con 'fin'\n OPCION: ");
 		scanf("%d", &menu);
 
@@ -1760,13 +1764,13 @@ int main(int argc, char *argv[]) {
 				yyparse();
 			}
 			else {
-				printf("Opcion invalida! ingrese 0 para salir, 1 para el ingresar el codigo a traves de un archivo, y 2 para ingresarllo de forma manual\n");
+				printf("Opcion invalida! \n0) para salir, \n1) para el ingresar el codigo a traves de un archivo, \n2) para ingresarlo de forma manual\n");
 			}
 		}
 	} 
 
 	else if (argc == 2){
-		if((yyin=fopen(argv[1],"rb"))){
+		if((yyin=fopen(argv[1], "rb"))){
 			yyparse();
 		} else {
 			printf("Error al abrir el archivo %s\n", argv[1]);
@@ -1775,8 +1779,9 @@ int main(int argc, char *argv[]) {
 
 	else {
 		printf("Error en los argumentos del main!");
-		return 0;
 	}
+
+return 0;
 }
 
 

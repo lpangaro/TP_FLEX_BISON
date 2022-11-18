@@ -44,8 +44,8 @@
      RESTA = 260,
      NL = 261,
      FDT = 262,
-     PABIERTO = 263,
-     PCERRADO = 264,
+     ABRIR_PARENTESIS = 263,
+     CERRAR_PARENTESIS = 264,
      IDENTIFICADOR = 265,
      INICIO = 266,
      FIN = 267,
@@ -62,8 +62,8 @@
 #define RESTA 260
 #define NL 261
 #define FDT 262
-#define PABIERTO 263
-#define PCERRADO 264
+#define ABRIR_PARENTESIS 263
+#define CERRAR_PARENTESIS 264
 #define IDENTIFICADOR 265
 #define INICIO 266
 #define FIN 267
@@ -78,7 +78,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "bison.y"
+#line 14 "bison.y"
 {
 	int num;
 	char* caracteres;
