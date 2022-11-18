@@ -44,8 +44,8 @@ ID	{LETRAS}({LETRAS}|{DIGITO})*
 .				{errorLexico();}
 %%
 void errorLexico(void){
-   printf("Error léxico: caracter \"%s\" inválido, en línea %d.", yytext, yylineno);
+   printf("ERROR LÉXICO: caracter \"%s\" inválido.\n", yytext);
 }
 void excesoCaracteres(void){
-	printf("Error sintáctico: La longitud máxima de los identificadores es de 32 caracteres");
+	printf("ERROR SINTÁCTICO: La longitud máxima de los identificadores es de 32 caracteres");
 }
