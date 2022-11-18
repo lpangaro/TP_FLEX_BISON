@@ -7,7 +7,7 @@ int yyerror();
 
 void asignar(char * nombre, int valor);
 void leer_id(char * nombre);
-void escribir_exp(char * nombre);
+void escribir_exp(int valor);
 
 %}
 
@@ -24,7 +24,7 @@ void escribir_exp(char * nombre);
 %left   SUMA    RESTA	COMA
 %right  ASIGNACION	
 
-%type <num> expresion primaria
+%type <num> expresion primaria 
 %type <caracteres> IDENTIFICADOR sentencia 
 
 %start objetivo
@@ -46,9 +46,9 @@ listaSentencias : listaSentencias sentencia		{}
 /* <sentencia> -> <identificador> := <expresion> #asignar; 	| 
 				  leer(<listadeIndentificadores>); 			|
 				  escribir(<listaExpresiones>); */
-sentencia : IDENTIFICADOR ASIGNACION expresion PUNTOYCOMA 								{printf("Asignacion"); asignar($1, $3);}
-		  | LEER ABRIR_PARENTESIS listaIdentificadores CERRAR_PARENTESIS PUNTOYCOMA		{printf("Lectura");}
-		  | ESCRIBIR ABRIR_PARENTESIS listaExpresiones CERRAR_PARENTESIS PUNTOYCOMA		{printf("Escritura");}
+sentencia : IDENTIFICADOR ASIGNACION expresion PUNTOYCOMA 								{printf("Asignacion\n"); asignar($1, $3);}
+		  | LEER ABRIR_PARENTESIS listaIdentificadores CERRAR_PARENTESIS PUNTOYCOMA		{printf("Lectura\n");}
+		  | ESCRIBIR ABRIR_PARENTESIS listaExpresiones CERRAR_PARENTESIS PUNTOYCOMA		{printf("Escritura\n");}
 ;
 
 /* <listaIdentificadores> -> <identificador> #leer_id {, <identificador> #leer_id} */
@@ -58,8 +58,8 @@ listaIdentificadores : listaIdentificadores COMA IDENTIFICADOR 	{leer_id($3);}
 
 /* <listaExpresiones> -> <expresion> #escribir_exp 
 					  {, <expresion> #escribir_exp} */
-listaExpresiones : listaExpresiones COMA expresion 	{printf("%d", $3);}
-				 | expresion						{printf("%d", $1);}
+listaExpresiones : listaExpresiones COMA expresion 	{escribir_exp($3);}
+				 | expresion						{escribir_exp($1);}
 ;			
 
 /* <expresion> -> <primaria> 
@@ -79,8 +79,8 @@ primaria : IDENTIFICADOR 								{leer_id($1);} //imprimo el valor del identific
 
 /* <operadorAditivo> -> SUMA #procesar_op |
 						RESTA #procesar_op 
-operadorAditivo : SUMA 	{$$ = '+';}  
-				| RESTA {$$ = '-';}
+operadorAditivo : SUMA 	{$$ = procesar_op($1);}  
+				| RESTA {$$ = procesar_op($1);}
 ;*/
 %%
 FILE *yyin;
@@ -95,8 +95,18 @@ Identificador buffer[500]; //Armo una lista de identificadores para irlos guarda
 int tope = 0; //me dice cuantos identificadores tengo en la lista
 int buscar(char* nombre);
 void asignar(char* nombre, int valor);
-void escribir_exp(char* nombre);
+void escribir_exp(int valor);
 void leer_id(char* nombre);
+char procesar_op(char operador);
+void listarIdentificadores (void);
+
+/*char procesar_op(char operador){
+	if(operador == '+')
+		return '+';
+
+	return '-';
+}*/
+
 
 int yyerror(char* s) {
 	if(!strcmp(s, "syntax error"))
@@ -140,11 +150,21 @@ void leer_id(char* nombre) {
 	}
 }
 
-void escribir_exp(char* nombre) {
-	int valor;
-	printf("ingrese valor para %s: ", nombre);
-	scanf("%d",&valor); 
-	asignar(nombre, valor);	
+void listarIdentificadores(){
+	int i;
+	printf("Los Identificadores declarados son:\n");
+	for(i=0; i<tope; i++) {
+		leer_id(buffer[i].nombre);
+	}
+}
+
+void escribir_exp(int valor) {
+	char nombre[largo];
+	listarIdentificadores();
+	printf("A que identificador le quiere asignar el valor %d (puede ser uno nuevo o reescribir uno de los anteriores): ", valor);
+	scanf("%s", nombre);
+
+	asignar(nombre, valor);
 }
 
 int main(int argc, char* argv[]) {
